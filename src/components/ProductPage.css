@@ -1,0 +1,175 @@
+
+
+.containerr {
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header .info {
+    max-width: 70%;
+}
+
+.header button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.row input,
+.row select {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.row .full-width {
+    width: 70%;
+}
+
+.row .clear-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.clear-filters a {
+    color: #007BFF;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.search-button {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.search-button button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #28A745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+table td img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+table input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.dropdown-arrow {
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.edit-icon {
+    cursor: pointer;
+    font-size: 16px;
+    color: #007BFF;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+}
+
+.details-row {
+    background-color: #f9f9f9;
+}
+
+.details-row.hidden {
+    display: none;
+}
+
+
+.details-content {
+    padding: 10px;
+  display:flex;
+  align-items:center;
+justify-content: space-between;
+    border-top: 1px solid #ddd;
+}
+.section-container{
+          display:flex;
+  align-items:center;
+justify-content: space-between;
+}
+.details-content .section {
+padding: 10px;
+}
+
+.details-content .section h3 {
+    margin: 0;
+    font-size: 18px;}
+    .icon-group {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .edit-icon, .delete-icon {
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    .delete-icon {
+        color: #dc3545;
+    }
+    
+    .delete-icon:hover {
+        color: #c82333;
+    }
+    

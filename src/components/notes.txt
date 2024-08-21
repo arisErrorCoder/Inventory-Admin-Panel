@@ -1,0 +1,691 @@
+// import React, { useContext, useState } from 'react';
+// import './AddProductPage.css';
+// import SupplierInfo from './SupplierInfo';
+// import { StoreContext, useStore } from './Store';
+
+// const AddProductPage = () => {
+//   const {categories, setCategories,brands, setBrands} = useContext(StoreContext)
+//   const [productName, setProductName] = useState('');
+//   const [selectedSupplier, setSelectedSupplier] = useState('');
+//   const [selectedCategory, setSelectedCategory] = useState('');
+//   const [selectedBrand, setSelectedBrand] = useState('');
+//   const [showSupplierDetails, setShowSupplierDetails] = useState(false);
+//   const [showCategoryDetails, setShowCategoryDetails] = useState(false);
+//   const [showBrandDetails, setShowBrandDetails] = useState(false);
+//   const [description, setDescription] = useState('');
+//   const [tags, setTags] = useState([]);
+//   const [images, setImages] = useState([]);
+//   const [sellInStore, setSellInStore] = useState(false);
+//   const [sellOnline, setSellOnline] = useState(false);
+//   const [showPopup, setShowPopup] = useState(null);
+//   // const [suppliers, setSuppliers] = useState(['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4']);
+// //   const [categories, setCategories] = useState(['Category 1', 'Category 2', 'Category 3']);
+//   // const [brands, setBrands] = useState(['Brand 1', 'Brand 2', 'Brand 3']);
+//   const [filteredSuppliers, setFilteredSuppliers] = useState();
+//   const [filteredCategories, setFilteredCategories] = useState(categories);
+//   const [filteredBrands, setFilteredBrands] = useState(brands);
+//   const [newSupplierName, setNewSupplierName] = useState('');
+//   const [newCategoryName, setNewCategoryName] = useState('');
+//   const [newBrandName, setNewBrandName] = useState('');
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [selectedProductType, setSelectedProductType] = useState('Standard');
+//   const [skuCodeType, setSkuCodeType] = useState('custom');
+//   const [skuCode, setSkuCode] = useState('14529');
+//   const [generatedSkuCode, setGeneratedSkuCode] = useState(''); // Auto-generated SKU code
+
+//   const handleNameChange = (e) => setProductName(e.target.value);
+
+//   const handleSave = () => {
+//     if (productName && selectedSupplier && selectedCategory && selectedBrand) {
+//       alert(`Product Saved: \nName: ${productName}\nSupplier: ${selectedSupplier}\nCategory: ${selectedCategory}\nBrand: ${selectedBrand}`);
+//       setProductName('');
+//       setSelectedSupplier('');
+//       setSelectedCategory('');
+//       setSelectedBrand('');
+//       setTags([]);
+//     } else {
+//       alert('Please fill in all fields.');
+//     }
+//   };
+
+//   const [suppliers, setSuppliers] = useState([{ name: '', code: '', price: '' }]);
+//     // State for supply price, markup, margin, and tax
+//     const [supplyPrice, setSupplyPrice] = useState('');
+//     const [markup, setMarkup] = useState('');
+//     const [margin, setMargin] = useState('');
+//     const [tax, setTax] = useState('');
+
+//     // Parse input to remove leading zeros and handle empty values
+//     const parseInput = (value) => {
+//         if (value.trim() === '') return '';
+//         return parseFloat(value.replace(/^0+/, '') || '0');
+//     };
+
+//     // Calculate retail price including tax
+//     const calculateRetailPrice = () => {
+//         // Convert state values to numbers, handling empty strings as 0
+//         const price = parseFloat(supplyPrice) || 0;
+//         const markupAmount = (price * (parseFloat(markup) || 0)) / 100;
+//         const marginAmount = (price * (parseFloat(margin) || 0)) / 100;
+//         const totalTax = parseFloat(tax) || 0;
+
+//         const totalPrice = price + markupAmount + marginAmount + totalTax;
+//         return totalPrice.toFixed(2);
+//     };
+
+//     // Handle input changes
+//     const handleSupplyPriceChange = (e) => setSupplyPrice(parseInput(e.target.value));
+//     const handleMarkupChange = (e) => setMarkup(parseInput(e.target.value));
+//     const handleMarginChange = (e) => setMargin(parseInput(e.target.value));
+//     const handleTaxChange = (e) => setTax(parseInput(e.target.value));
+
+//   const handleSuppliersChange = (newSuppliers) => {
+//     setSuppliers(newSuppliers);
+//   };
+
+
+
+//   const toggleSupplierSection = () => setShowSupplierDetails(prev => !prev);
+//   const toggleCategorySection = () => setShowCategoryDetails(prev => !prev);
+//   const toggleBrandSection = () => setShowBrandDetails(prev => !prev);
+
+//   const selectSupplier = (supplier) => {
+//     setSelectedSupplier(supplier);
+//     setShowSupplierDetails(false);
+//   };
+
+//   const selectCategory = (category) => {
+//     setSelectedCategory(category);
+//     setShowCategoryDetails(false);
+//   };
+
+//   const selectBrand = (brand) => {
+//     setSelectedBrand(brand);
+//     setShowBrandDetails(false);
+//   };
+
+//   const showAddPopup = (type) => setShowPopup(type);
+//   const closeAddPopup = () => setShowPopup(null);
+  
+//   const filterItems = (type, e) => {
+//   const searchValue = e.target.value.toLowerCase();
+//   setSearchTerm(searchValue);
+  
+//     if (type === 'supplier') {
+//       setFilteredSuppliers(
+//         suppliers.filter(supplier =>
+//           supplier.name.toLowerCase().includes(searchValue)
+//         )
+//       );
+//     } else if (type === 'category') {
+//       setFilteredCategories(
+//         categories.filter(category =>
+//           category.name.toLowerCase().includes(searchValue)
+//         )
+//       );
+//     } else if (type === 'brand') {
+//       setFilteredBrands(
+//         brands.filter(brand =>
+//           brand.name.toLowerCase().includes(searchValue)
+//         )
+//       );
+//     }
+//   };
+  
+//   const addNewBrand = () => {
+//     if (newBrandName.trim()) {
+//       const updatedBrands = [...brands, { name: newBrandName, description: '', products: 0 }];
+//       setBrands(updatedBrands);
+//       setFilteredBrands(updatedBrands);
+//       setSelectedBrand(newBrandName);
+//       closeAddPopup();
+//       setNewBrandName('');
+//       setShowBrandDetails(false);
+//     } else {
+//       alert('Please enter a brand name.');
+//     }
+//   };
+  
+//   const addNewCategory = () => {
+//     if (newCategoryName.trim()) {
+//       const updatedCategories = [...categories, { name: newCategoryName, products: 0 }];
+//       setCategories(updatedCategories);
+//       setFilteredCategories(updatedCategories);
+//       setSelectedCategory(newCategoryName);
+//       closeAddPopup();
+//       setNewCategoryName('');
+//       setShowCategoryDetails(false);
+//     } else {
+//       alert('Please enter a category name.');
+//     }
+//   };
+  
+  
+//   const handleProductTypeChange = (type) => setSelectedProductType(type);
+//   const generateSkuCode = () => {
+//     const newSkuCode = `${Math.floor(Math.random() * 10000)}`;
+//     setGeneratedSkuCode(newSkuCode);
+//   };
+
+//   // Function to handle SKU code type change
+//   const handleSkuCodeTypeChange = (e) => {
+//     const value = e.target.value;
+//     setSkuCodeType(value);
+//     if (value === 'auto') {
+//       generateSkuCode();
+//     } else {
+//       setGeneratedSkuCode('');
+//     }
+//   };
+
+//   const handleBrowse = (e) => {
+//     const files = Array.from(e.target.files);
+//     const newImages = files.map((file) => URL.createObjectURL(file));
+//     setImages((prevImages) => [...prevImages, ...newImages]);
+//   };
+
+//   const handleDrop = (e) => {
+//     e.preventDefault();
+//     const files = Array.from(e.dataTransfer.files);
+//     const newImages = files.map((file) => URL.createObjectURL(file));
+//     setImages((prevImages) => [...prevImages, ...newImages]);
+//   };
+
+//   const handleDragOver = (e) => {
+//     e.preventDefault();
+//   };
+
+//   const handleReorder = (e) => {
+//     e.preventDefault();
+//     const draggedImage = e.dataTransfer.getData('text/plain');
+//     const targetIndex = Number(e.currentTarget.dataset.index);
+//     setImages((prevImages) => {
+//       const reorderedImages = [...prevImages];
+//       const draggedIndex = prevImages.indexOf(draggedImage);
+//       reorderedImages.splice(draggedIndex, 1);
+//       reorderedImages.splice(targetIndex, 0, draggedImage);
+//       return reorderedImages;
+//     });
+//   };
+
+//   const handleRemoveImage = (indexToRemove) => {
+//     setImages((prevImages) =>
+//       prevImages.filter((_, index) => index !== indexToRemove)
+//     );
+//   };
+//   const addNewSupplier = () => {
+//     setFilteredSuppliers([...filteredSuppliers, newSupplierName]);
+//     setNewSupplierName('');
+//     closeAddPopup();
+//   };
+
+//   const handleSupplierChange = (index, field, value) => {
+//     const updatedSuppliers = suppliers.map((supplier, i) =>
+//       i === index ? { ...supplier, [field]: value } : supplier
+//     );
+//     setSuppliers(updatedSuppliers);
+//   };
+
+//   const addSupplierRow = () => {
+//     setSuppliers([...suppliers, { name: '', code: '', price: '' }]);
+//   };
+
+//   const deleteSupplierRow = (index) => {
+//     const updatedSuppliers = suppliers.filter((_, i) => i !== index);
+//     setSuppliers(updatedSuppliers);
+//   };
+
+
+
+
+
+//   // Tag handling
+//   const handleTagKeyPress = (e) => {
+//     if (e.key === 'Enter' && e.target.value.trim() !== '') {
+//       e.preventDefault();
+//       addTag(e.target.value);
+//       e.target.value = '';
+//     }
+//   };
+
+//   const addTag = (value) => {
+//     if (!tags.includes(value)) {
+//       setTags([...tags, value]);
+//     }
+//   };
+
+//   const removeTag = (value) => {
+//     setTags(tags.filter(tag => tag !== value));
+//   };
+
+
+
+
+
+
+
+
+
+//   return (
+//     <div className="add-product">
+//       <h1> <span className="arrow">←</span> New Product</h1>
+//       <div className="subtitle">
+//           <span>Add, view, and edit your products all in one place. Need help?</span>
+//           <div className="button-group">
+//             <button className="cancel-button">Cancel</button>
+//             <button className="save-button" onClick={handleSave}>Save</button>
+//           </div>
+//         </div>
+//       <div className="row">
+//       <div className="form-group">
+//         <label htmlFor="product-name">Product Name:</label>
+//         <input
+//           id="product-name"
+//           type="text"
+//           value={productName}
+//           onChange={handleNameChange}
+//           placeholder="Enter product name"
+//         />
+//       </div>
+
+
+//       <div className="form-group">
+//   <label>Category:</label>
+//   <div className="category-container">
+//     <div className="category-summary" onClick={toggleCategorySection}>
+//       <p id="selected-category-text">{selectedCategory || 'Select Category'}</p>
+//       <button>{showCategoryDetails ? '▲' : '▼'}</button>
+//     </div>
+
+//     {showCategoryDetails && (
+//       <div id="category-details" className="category-details">
+//         <input
+//           type="text"
+//           placeholder="Search category..."
+//           className="search-category"
+//           onChange={(e) => filterItems('category', e)}
+//           value={searchTerm}
+//         />
+//         <ul id="category-list" className="category-list">
+//           {filteredCategories.map((category, index) => (
+//             <li
+//               key={index}
+//               className="category-item"
+//               onClick={() => selectCategory(category.name)}
+//             >
+//               {category.name}
+//             </li>
+//           ))}
+//         </ul>
+
+//         {filteredCategories.length === 0 && searchTerm && (
+//           <button
+//             id="add-new-category"
+//             className="add-new-category"
+//             onClick={() => showAddPopup('category')}
+//           >
+//             + Add New Category
+//           </button>
+//         )}
+//       </div>
+//     )}
+
+//     {showPopup === 'category' && (
+//       <div id="add-category-popup" className="popup">
+//         <div className="popup-content">
+//           <span className="close-popup" onClick={closeAddPopup}>
+//             &times;
+//           </span>
+//           <h3>Add New Category</h3>
+//           <input
+//             type="text"
+//             id="new-category-input"
+//             placeholder="Enter category name"
+//             value={newCategoryName}
+//             onChange={(e) => setNewCategoryName(e.target.value)}
+//           />
+//           <button onClick={addNewCategory}>Add Category</button>
+//         </div>
+//       </div>
+//     )}
+//   </div>
+// </div>
+
+
+//        <div className="form-group">
+//   <label>Brand:</label>
+//   <div className="brand-container">
+//     <div className="brand-summary" onClick={toggleBrandSection}>
+//       <p id="selected-brand-text">{selectedBrand || 'Select Brand'}</p>
+//       <button>{showBrandDetails ? '▲' : '▼'}</button>
+//     </div>
+
+//     {showBrandDetails && (
+//       <div id="brand-details" className="brand-details">
+//         <input
+//           type="text"
+//           placeholder="Search brand..."
+//           className="search-brand"
+//           onChange={(e) => filterItems('brand', e)}
+//           value={searchTerm}
+//         />
+//         <ul id="brand-list" className="brand-list">
+//           {filteredBrands.map((brand, index) => (
+//             <li
+//               key={index}
+//               className="brand-item"
+//               onClick={() => selectBrand(brand.name)}
+//             >
+//               {brand.name}
+//             </li>
+//           ))}
+//         </ul>
+
+//         {filteredBrands.length === 0 && searchTerm && (
+//           <button
+//             id="add-new-brand"
+//             className="add-new-brand"
+//             onClick={() => showAddPopup('brand')}
+//           >
+//             + Add New Brand
+//           </button>
+//         )}
+//       </div>
+//     )}
+
+//     {showPopup === 'brand' && (
+//       <div id="add-brand-popup" className="popup">
+//         <div className="popup-content">
+//           <span className="close-popup" onClick={closeAddPopup}>
+//             &times;
+//           </span>
+//           <h3>Add New Brand</h3>
+//           <input
+//             type="text"
+//             id="new-brand-input"
+//             placeholder="Enter brand name"
+//             value={newBrandName}
+//             onChange={(e) => setNewBrandName(e.target.value)}
+//           />
+//           <button onClick={addNewBrand}>Add Brand</button>
+//         </div>
+//       </div>
+//     )}
+//   </div>
+// </div>
+
+//        </div>
+//       <div className="form-group">
+//        <label>Description:</label>
+//         <textarea
+//           value={description}
+//           onChange={(e) => setDescription(e.target.value)}
+//           placeholder="Enter product description"
+//         />
+//       </div>
+      
+//       <div className="form-group">
+//           <label>Tags:</label>
+//           <div className="input-container">
+//             <div className="input-wrapper" id="input-wrapper">
+//               <input
+//                 type="text"
+//                 id="input-box"
+//                 placeholder="Type a tag and press Enter..."
+//                 onKeyPress={handleTagKeyPress}
+//               />
+//               {tags.map((tag, index) => (
+//                 <span key={index} className="chip">
+//                   {tag}
+//                   <span className="delete-chip" onClick={() => removeTag(tag)}>×</span>
+//                 </span>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+      
+//       <div className="form-group">
+//         <label>Upload Images:</label>
+//         <div
+//           id="drop-area"
+//           className="drop-area"
+//           onDrop={handleDrop}
+//           onDragOver={handleDragOver}
+//         >
+//           <p>Drag images here to upload</p>
+//           <p>Drag and drop to reorder</p>
+//           <p>Drag outside to delete</p>
+//           <input
+//             type="file"
+//             id="image-upload"
+//             className="image-upload-input"
+//             multiple
+//             accept="image/*"
+//             onChange={handleBrowse}
+//           />
+//           <label htmlFor="image-upload" className="choose-images-button">
+//             Choose images
+//           </label>
+//         </div>
+//         <div className="image-preview">
+//           {images.map((image, index) => (
+//             <div
+//               key={index}
+//               className="image-item"
+//               draggable
+//               onDragStart={(e) => e.dataTransfer.setData('text/plain', image)}
+//               onDrop={(e) => handleReorder(e)}
+//               data-index={index}
+//             >
+//               <img src={image} alt={`Preview ${index}`} />
+//               <button
+//                 onClick={() => handleRemoveImage(index)}
+//                 className="remove-image-button"
+//               >
+//                 &times;
+//               </button>
+//             </div>
+//           ))}
+//         </div>
+//         </div>
+      
+//       <div className="row  image-preview">
+//         <label>
+//           <input
+//             type="checkbox"
+//             checked={sellInStore}
+//             onChange={(e) => setSellInStore(e.target.checked)}
+//           />
+//           Sell on point-of-sale
+//         </label>
+//         <label>
+//           <input
+//             type="checkbox"
+//             checked={sellOnline}
+//             onChange={(e) => setSellOnline(e.target.checked)}
+//           />
+//           Sell online
+//         </label>
+//       </div>
+//       <div className="inventory-section">
+//         <h2>Inventory</h2>
+//         <div className="inventory-options">
+//           <div
+//             className={`inventory-option ${selectedProductType === 'Standard' ? 'selected' : ''}`}
+//             onClick={() => handleProductTypeChange('Standard')}
+//           >
+//             <h3>Standard Product</h3>
+//             <p>This product is a single SKU with its own inventory.</p>
+//           </div>
+//           <div
+//             className={`inventory-option ${selectedProductType === 'Variant' ? 'selected' : ''}`}
+//             onClick={() => handleProductTypeChange('Variant')}
+//           >
+//             <h3>Variant Product</h3>
+//             <p>This is a group of similar products with different attributes like size or color. Each variant is a unique SKU with its own inventory.</p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {selectedProductType === 'Standard' && (
+//         <>
+//  <div className="sku-container">
+//         <h2>SKU CODES</h2>
+//         <div className="sku-inputs">
+//           <div className="sku-field">
+//             <label htmlFor="sku-code-type">SKU Code Type:</label>
+//             <select
+//               id="sku-code-type"
+//               value={skuCodeType}
+//               onChange={handleSkuCodeTypeChange}
+//             >
+//               <option value="custom">Custom</option>
+//               <option value="auto">Auto-Generated</option>
+//             </select>
+//           </div>
+//           <div className="sku-field">
+//             <label htmlFor="sku-code">SKU Code:</label>
+//             <input
+//               type="text"
+//               id="sku-code"
+//               value={skuCodeType === 'auto' ? generatedSkuCode : skuCode}
+//               onChange={(e) => setSkuCode(e.target.value)}
+//               placeholder="Enter SKU code"
+//               readOnly={skuCodeType === 'auto'}
+//             />
+//           </div>
+//         </div>
+//         <a href="#" className="add-code">+ Add another code</a>
+
+//         <div className="sku-preview">
+//           <div className="preview-image">
+//           <img src={images[0]} alt="Preview" />
+//           </div>
+//           <div className="preview-details">
+//             <p className="product-name">{productName || 'Product Name'}</p>
+//             <p className="sku-number">{skuCodeType === 'auto' ? generatedSkuCode : skuCode}</p>
+//             {/* <p className="sku-description">
+//               The first SKU code will be shown to staff and customers to help identify this product. When you have multiple codes all the barcodes will be scannable.
+//             </p> */}
+//           </div>
+//         </div>
+//       </div>
+//       <SupplierInfo suppliers={suppliers} onSuppliersChange={handleSuppliersChange} />
+// </>
+
+//       )}
+//             {selectedProductType === 'Variant' && (
+//         <>
+//       <SupplierInfo suppliers={suppliers} onSuppliersChange={handleSuppliersChange} />
+
+// <div class="variants-section">
+//     <h2>Variants</h2>
+//     <p class="variants-description">Choose up to three variable attributes for this product to create and manage SKUs and their inventory levels.</p>
+    
+//     <div class="variant-row">
+//         <div class="variant-label">Attribute (e.g. colour)</div>
+//         <div class="variant-label">Value (e.g. Green)</div>
+//     </div>
+    
+//     <div class="variant-row">
+//         <select class="variant-select">
+//             <option>Choose a variant attribute</option>
+//             <option>Color</option>
+//             <option>Size</option>
+//             <option>Material</option>
+//         </select>
+//         <input type="text" class="variant-input" placeholder="Enter value"/>
+//     </div>
+
+//     <a href="#" class="add-attribute">+ Add another attribute</a>
+
+//     <p class="variant-status">This product has 0 variants</p>
+// </div>
+
+// </>
+
+//       )}
+//       <div class="tax-info">
+//     <h2>Tax Information</h2>
+
+//     <div class="form-group">
+//         <label for="tax">Tax</label>
+//         <select id="tax" class="form-control">
+//             <option>Default Sales Tax</option>
+//             <option>GST (+15%)</option>
+//             <option>No Tax (0%)</option>
+//         </select>
+//     </div>
+//       </div>
+
+
+//       <div className="price-section">
+//             <h2>Price</h2>
+//             <h3 className="section-title">PRICE</h3>
+            
+//             <div className="price-table">
+//                 <div className="price-row">
+//                     <div className="price-header">Price point</div>
+//                     <div className="price-header">Supply price</div>
+//                     <div className="price-header">Markup</div>
+//                     <div className="price-header">Margin</div>
+//                     <div className="price-header">Tax</div>
+//                     <div className="price-header">Retail price Including tax</div>
+//                 </div>
+//                 <div className="price-row">
+//                     <div className="price-item">General Price Book (All Products)</div>
+//                     <div className="price-item">
+//                         <input
+//                             type="text"
+//                             value={supplyPrice}
+//                             onChange={handleSupplyPriceChange}
+//                             placeholder="$0.00"
+//                         />
+//                     </div>
+//                     <div className="price-item">
+//                         <div className="input-group">
+//                             <input
+//                                 type="text"
+//                                 value={markup}
+//                                 onChange={handleMarkupChange}
+//                                 placeholder="0.00"
+//                             />
+//                             <span className="input-group-text">%</span>
+//                         </div>
+//                     </div>
+//                     <div className="price-item">
+//                         <div className="input-group">
+//                             <input
+//                                 type="text"
+//                                 value={margin}
+//                                 onChange={handleMarginChange}
+//                                 placeholder="0.00"
+//                             />
+//                             <span className="input-group-text">%</span>
+//                         </div>
+//                     </div>
+//                     <div className="price-item">
+//                     <p>0%</p>
+//                     </div>
+//                     <div className="price-item">
+//                         <input
+//                             type="text"
+//                             value={`$${calculateRetailPrice()}`}
+//                             readOnly
+//                         />
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+
+
+
+//       <div className="buttons">
+//         <button className="btn-cancel">Cancel</button>
+//         <button onClick={handleSave} className="btn-save">Save</button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddProductPage;

@@ -1,0 +1,59 @@
+.supplier-info {
+    padding: 20px;
+  }
+  
+  .supplier-row {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .supplier-summary {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+
+  
+  .supplier-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .supplier-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .supplier-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .add-supplier {
+    margin-top: 10px;
+  }
+  
+  .search-supplier {
+    width: calc(100% - 22px);
+  }
+  
+  .add-supplier-btn, .delete-btn {
+    margin-top: 10px;
+  }
+
+.supplier-details {
+    display: none; /* Hidden by default */
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    width: 100%;
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  
+  .supplier-details.show {
+    display: block; /* Show when 'show' class is applied */
+  }
+  
