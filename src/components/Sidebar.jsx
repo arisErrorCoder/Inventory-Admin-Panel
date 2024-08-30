@@ -85,6 +85,11 @@ const Sidebar = ({ onMenuClick }) => {
                     <span className="text">Product categories</span>
                   </a>
                 </li>
+                <li className={activeMenu === 'productstags' ? 'active' : ''}>
+                  <a href="#" onClick={() => handleMenuItemClick('productstags')}>
+                    <span className="text">Product Tags</span>
+                  </a>
+                </li>
               </ul>
             </li>
             <li className={activeMenu === 'agenda' ? 'active' : ''}>

@@ -1,0 +1,118 @@
+.product-tags-container {
+    padding: 20px;
+    height: 100%;
+    background-color: #f9f9f9;
+  }
+  
+  .product-tags-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .product-tags-description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .product-tags-add-btn {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .product-tags-add-btn:hover {
+    background-color: #155bb5;
+  }
+  
+  .product-tags-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .product-tags-table th,
+  .product-tags-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .product-tags-table th {
+    background-color: #f1f1f1;
+  }
+  
+  .product-tags-view-link {
+    color: #1a73e8;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  
+  .product-tags-edit-icon,
+  .product-tags-delete-icon {
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .product-tags-edit-icon:hover,
+  .product-tags-delete-icon:hover {
+    color: #155bb5;
+  }
+  
+  .product-tags-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .product-tags-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    position: relative;
+  }
+  
+  .product-tags-close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .product-tags-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .product-tags-save-btn {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  
+  .product-tags-save-btn:hover {
+    background-color: #155bb5;
+  }
+  

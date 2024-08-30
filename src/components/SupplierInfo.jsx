@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./SupplierInfo.css"
 // Define the initial list of supplier names
 const initialSupplierNames = [
@@ -42,6 +42,11 @@ const SupplierInfo = ({ onSuppliersChange }) => {
   const filteredSuppliers = supplierList.filter(name =>
     name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(() => {
+    console.log(suppliers)
+  }, [suppliers])
+  
 
   // Add a new supplier to the list
   const addNewSupplier = () => {

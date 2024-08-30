@@ -1,0 +1,126 @@
+.add-promo-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.add-promo-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.add-promo-intro {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.add-promo-intro p {
+    margin: 0;
+}
+
+.add-promo-cancel-button,
+.add-promo-save-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.add-promo-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-promo-left {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.add-promo-right {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+.schedule-promotion-container{
+    margin-top: 100px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.date-picker {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.discount-details {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    max-width: 500px;
+}
+
+.discount-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.discount-group,
+.product-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.discount-type-buttons,
+.product-type-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.discount-type-buttons button,
+.product-type-buttons button {
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+}
+
+.discount-type-buttons button.selected,
+.product-type-buttons button.selected {
+    border-color: blue;
+    color: blue;
+}
+
+.discount-input {
+    margin-top: 10px;
+    padding: 5px;
+    width: 80px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.discount-input + span {
+    margin-left: 10px;
+}
+.product-search{
+    width: 500px;
+    margin: 15px 0px;
+}

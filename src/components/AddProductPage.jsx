@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './AddProductPage.css';
 import SupplierInfo from './SupplierInfo';
 import { StoreContext} from './Store';
 
-const AddProductPage = () => {
-  const {categories, setCategories,brands, setBrands} = useContext(StoreContext)
+const AddProductPage = ({handleBackToProducts}) => {
+  const {categories, setCategories,brands, setBrands,} = useContext(StoreContext)
   const [productName, setProductName] = useState('');
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -28,102 +28,144 @@ const AddProductPage = () => {
   const [skuCodeType, setSkuCodeType] = useState('custom');
   const [skuCode, setSkuCode] = useState('14529');
   const [generatedSkuCode, setGeneratedSkuCode] = useState(''); // Auto-generated SKU code
+  const [supplyPrice, setSupplyPrice] = useState('0');
+  const [markup, setMarkup] = useState('0');
+  const [margin, setMargin] = useState('0');
 
 
 
-   // State to hold all product data
-   const [productData, setProductData] = useState({
-    productName: '',
-    selectedCategory: '',
-    selectedBrand: '',
-    description: '',
-    tags: [],
-    images: [],
-    sellInStore: false,
-    sellOnline: false,
-    skuCode: '',
-    skuCodeType: 'custom',
-    markup: '',
-    margin: '',
-    tax: '',
-  });
-
-
-  // Update state whenever an input changes
-
-  const updateProductData = (key, value) => {
+  const updatedProductData = (key, value) => {
     setProductData(prevState => ({
       ...prevState,
       [key]: value
     }));
   };
+  
 
   // Handle Name Change
   const handleNameChange = (e) => {
     const value = e.target.value;
     setProductName(value);
-    updateProductData('productName', value);
+    updatedProductData('productName', value);
+  };
+
+  // Handle Name Change
+  const handleDescriptionChange = (e) => {
+    const value = e.target.value;
+    setDescription(value);
+    updatedProductData('description', value);
+  };
+  const handlecategoryChange = (e) => {
+    const value = e.target.value;
+    setSelectedBrand(value);
+    updatedProductData('selectedBrand', value);
   };
 
 
+
+  const [productData, setProductData] = useState({
+    productName: '',
+            selectedCategory: '',
+            selectedBrand: '',
+            description: '',
+            tags: [],
+            images: [],
+            sellInStore: false,
+            sellOnline: false,
+            skuCode: '',
+            skuCodeType: 'custom',  
+            markup: '',
+            margin: '',
+            tax: '',
+            suppliers: [{ name: '', code: '', price: '' }],
+  });
+
 // Handle Save
 const handleSave = () => {
-  if (productName && selectedCategory && selectedBrand) {
-      // Update the productData state before saving
-      const updatedProductData = {
-          ...productData,
-          productName,
-          selectedCategory,
-          selectedBrand,
-          markup,
-          margin,
-          tax: 0, // Assuming tax is 0 as per the example
-          // Other fields remain the same as in the state
-      };
+  // Ensure all required fields are filled
+  if (
+    productName &&
+    selectedCategory &&
+    selectedBrand
+  )
+   {
+    // Update the productData state with current form values
+    const updatedProductData = {
+      ...productData,
+      productName,
+      selectedCategory,
+      selectedBrand,
+      description,
+      tags,
+      images,
+      sellInStore,
+      sellOnline,
+      skuCode,
+      skuCodeType,
+      markup,
+      margin,
+      tax,
+      // suppliers: suppliers.map(supplier => ({
+      //   ...supplier,
+      //   name: supplier.name || '', // Ensure supplier name is not empty
+      //   code: supplier.code || '', // Ensure supplier code is not empty
+      //   price: supplier.price || '' // Ensure supplier price is not empty
+      // }))
+    };
 
-      // Send data to the backend or handle it as needed
-      console.log('Product Data Saved:', updatedProductData);
-      alert(`Product Saved: \nName: ${productName}\nCategory: ${selectedCategory}\nBrand: ${selectedBrand}`);
+    // Print the updated product data to console (for debugging)
+    console.log('Product Data Saved:', updatedProductData);
 
-      // Reset form fields and productData state
-      setProductName('');
-      setSelectedCategory('');
-      setSelectedBrand('');
-      setMarkup('');
-      setMargin('');
-      setTags([]);
-      setImages([]);
-      setSellInStore(false);
-      setSellOnline(false);
-      setProductData({
-          productName: '',
-          selectedCategory: '',
-          selectedBrand: '',
-          description: '',
-          tags: [],
-          images: [],
-          sellInStore: false,
-          sellOnline: false,
-          skuCode: '',
-          skuCodeType: 'custom',
-          markup: '',
-          margin: '',
-          tax: '',
-      });
+    // You can send updatedProductData to your backend here
+    // Example: axios.post('/api/products', updatedProductData);
 
-      // Optionally, send the updatedProductData to your backend
-      // Example: axios.post('/api/products', updatedProductData);
+    // Show success message
+    alert(`Product Saved:\nName: ${productName}\nCategory: ${selectedCategory}\nBrand: ${selectedBrand}`);
+
+    // Reset form fields and productData state
+    setProductName('');
+    setDescription('');
+    setSelectedCategory('');
+    setSelectedBrand('');
+    setTags([]);
+    setImages([]);
+    setSellInStore(false);
+    setSellOnline(false);
+    setProductData({
+      productName: '',
+      selectedCategory: '',
+      selectedBrand: '',
+      description: '',
+      tags: [],
+      images: [],
+      sellInStore: false,
+      sellOnline: false,
+      skuCode: '',
+      skuCodeType: 'custom',
+      markup: '',
+      margin: '',
+      tax: '',
+      // suppliers: [{ name: '', code: '', price: '' }]
+    });
+
   } else {
-      alert('Please fill in all fields.');
+    alert('Please fill in all required fields.');
   }
 };
+
+useEffect(() => {
+console.log(productData)
+console.log(tags)
+console.log(images)
+console.log(selectedBrand)
+console.log(selectedCategory)
+console.log(searchTerm)
+// console.log(updatedProductData)
+}, [productData,tags,selectedBrand,selectedCategory,searchTerm])
 
 
   const [suppliers, setSuppliers] = useState([{ name: '', code: '', price: '' }]);
     // State for supply price, markup, margin, and tax
-    const [supplyPrice, setSupplyPrice] = useState('');
-    const [markup, setMarkup] = useState('');
-    const [margin, setMargin] = useState('');
     const [tax, setTax] = useState('');
 
     // Parse input to remove leading zeros and handle empty values
@@ -133,23 +175,46 @@ const handleSave = () => {
     };
 
     // Calculate retail price including tax
-    const calculateRetailPrice = () => {
-        // Convert state values to numbers, handling empty strings as 0
-        const price = parseFloat(supplyPrice) || 0;
-        const markupAmount = (price * (parseFloat(markup) || 0)) / 100;
-        const marginAmount = (price * (parseFloat(margin) || 0)) / 100;
-        const totalTax = parseFloat(tax) || 0;
+ // Calculate Retail Price Including Tax
+ const calculateRetailPrice = () => {
+  const supply = parseFloat(supplyPrice) || 0;
+  const markupPercent = parseFloat(markup) || 0;
+  const marginPercent = parseFloat(margin) || 0;
+  const taxPercent = parseFloat(tax) || 0;
 
-        const totalPrice = price + markupAmount + marginAmount + totalTax;
-        return totalPrice.toFixed(2);
-    };
+  const markupAmount = (supply * markupPercent) / 100;
+  const totalPriceWithMarkup = supply + markupAmount;
+  const marginAmount = (totalPriceWithMarkup * marginPercent) / 100;
+  const priceBeforeTax = totalPriceWithMarkup + marginAmount;
+  const taxAmount = (priceBeforeTax * taxPercent) / 100;
 
-    // Handle input changes
-    const handleSupplyPriceChange = (e) => setSupplyPrice(parseInput(e.target.value));
-    const handleMarkupChange = (e) => setMarkup(parseInput(e.target.value));
-    const handleMarginChange = (e) => setMargin(parseInput(e.target.value));
-    const handleTaxChange = (e) => setTax(parseInput(e.target.value));
+  return (priceBeforeTax + taxAmount).toFixed(2);
+};
 
+// Handle Input Changes and Update Product Data
+const handleSupplyPriceChange = (e) => {
+  const value = e.target.value;
+  setSupplyPrice(value);
+  updatedProductData('supplyPrice', value);
+};
+
+const handleMarkupChange = (e) => {
+  const value = e.target.value;
+  setMarkup(value);
+  updatedProductData('markup', value);
+};
+
+const handleMarginChange = (e) => {
+  const value = e.target.value;
+  setMargin(value);
+  updatedProductData('margin', value);
+};
+
+const handleTaxChange = (e) => {
+  const value = e.target.value;
+  setTax(value);
+  updatedProductData('tax', value);
+};
   const handleSuppliersChange = (newSuppliers) => {
     setSuppliers(newSuppliers);
   };
@@ -165,14 +230,16 @@ const handleSave = () => {
     setShowSupplierDetails(false);
   };
 
-  const selectCategory = (category) => {
-    setSelectedCategory(category);
-    setShowCategoryDetails(false);
+  const selectCategory = (categoryName) => {
+    setSelectedCategory(categoryName);
+    setShowCategoryDetails(false); // Close the category details dropdown after selection
+    updatedProductData('selectedCategory', categoryName); // Send the selected category to parent component
   };
 
-  const selectBrand = (brand) => {
-    setSelectedBrand(brand);
-    setShowBrandDetails(false);
+  const selectBrand = (brandName) => {
+    setSelectedBrand(brandName);
+    setShowBrandDetails(false); // Close the brand details dropdown after selection
+    updatedProductData('selectedBrand', brandName); // Send the selected brand to parent component
   };
 
   const showAddPopup = (type) => setShowPopup(type);
@@ -236,56 +303,99 @@ const handleSave = () => {
   const handleSkuCodeTypeChange = (e) => {
     const value = e.target.value;
     setSkuCodeType(value);
-    updateProductData('skuCodeType', value);
     if (value === 'auto') {
       generateSkuCode();
     } else {
-      setGeneratedSkuCode('');
-      updateProductData('skuCode', '');
+      setSkuCode(''); // Clear SKU code when switching to custom
     }
+    updatedProductData('skuCodeType', value); // Notify parent component
   };
 
   // Handle SKU code generation
   const generateSkuCode = () => {
     const newSkuCode = `${Math.floor(Math.random() * 10000)}`;
     setGeneratedSkuCode(newSkuCode);
-    updateProductData('skuCode', newSkuCode);
+    updatedProductData('skuCode', newSkuCode);
   };
 
-  const handleBrowse = (e) => {
+  // const handleBrowse = (e) => {
+  //   const files = Array.from(e.target.files);
+  //   const newImages = files.map((file) => URL.createObjectURL(file));
+  //   setImages((prevImages) => [...prevImages, ...newImages]);
+  // };
+
+  // const handleDrop = (e) => {
+  //   e.preventDefault();
+  //   const files = Array.from(e.dataTransfer.files);
+  //   const newImages = files.map((file) => URL.createObjectURL(file));
+  //   setImages((prevImages) => [...prevImages, ...newImages]);
+  // };
+
+  // const handleDragOver = (e) => {
+  //   e.preventDefault();
+  // };
+
+  // const handleReorder = (e) => {
+  //   e.preventDefault();
+  //   const draggedImage = e.dataTransfer.getData('text/plain');
+  //   const targetIndex = Number(e.currentTarget.dataset.index);
+  //   setImages((prevImages) => {
+  //     const reorderedImages = [...prevImages];
+  //     const draggedIndex = prevImages.indexOf(draggedImage);
+  //     reorderedImages.splice(draggedIndex, 1);
+  //     reorderedImages.splice(targetIndex, 0, draggedImage);
+  //     return reorderedImages;
+  //   });
+  // };
+
+  // const handleRemoveImage = (indexToRemove) => {
+  //   setImages((prevImages) =>
+  //     prevImages.filter((_, index) => index !== indexToRemove)
+  //   );
+  // };
+   // Handle file input change
+   const handleBrowse = (e) => {
     const files = Array.from(e.target.files);
-    const newImages = files.map((file) => URL.createObjectURL(file));
-    setImages((prevImages) => [...prevImages, ...newImages]);
+    const newImages = files.map(file => URL.createObjectURL(file));
+    setImages(prevImages => [...prevImages, ...newImages]);
+    updatedProductData('images', [...images, ...newImages]); // Send updated images to parent component
   };
 
+  // Handle drop event
   const handleDrop = (e) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
-    const newImages = files.map((file) => URL.createObjectURL(file));
-    setImages((prevImages) => [...prevImages, ...newImages]);
+    const newImages = files.map(file => URL.createObjectURL(file));
+    setImages(prevImages => [...prevImages, ...newImages]);
+    updatedProductData('images', [...images, ...newImages]); // Send updated images to parent component
   };
 
+  // Handle drag over event
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
-  const handleReorder = (e) => {
-    e.preventDefault();
-    const draggedImage = e.dataTransfer.getData('text/plain');
-    const targetIndex = Number(e.currentTarget.dataset.index);
-    setImages((prevImages) => {
-      const reorderedImages = [...prevImages];
-      const draggedIndex = prevImages.indexOf(draggedImage);
-      reorderedImages.splice(draggedIndex, 1);
-      reorderedImages.splice(targetIndex, 0, draggedImage);
-      return reorderedImages;
-    });
+  // Handle image removal
+  const handleRemoveImage = (index) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+    updatedProductData('images', updatedImages); // Send updated images to parent component
   };
 
-  const handleRemoveImage = (indexToRemove) => {
-    setImages((prevImages) =>
-      prevImages.filter((_, index) => index !== indexToRemove)
-    );
+  // Handle image reordering
+  const handleReorder = (e) => {
+    e.preventDefault();
+    const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    const targetIndex = parseInt(e.target.dataset.index, 10);
+
+    if (draggedIndex !== targetIndex) {
+      const updatedImages = [...images];
+      const [movedImage] = updatedImages.splice(draggedIndex, 1);
+      updatedImages.splice(targetIndex, 0, movedImage);
+
+      setImages(updatedImages);
+      updatedProductData('images', updatedImages); // Send updated images to parent component
+    }
   };
   const addNewSupplier = () => {
     setFilteredSuppliers([...filteredSuppliers, newSupplierName]);
@@ -314,27 +424,143 @@ const handleSave = () => {
 
 
   // Tag handling
+  // const handleTagKeyPress = (e) => {
+  //   if (e.key === 'Enter' && e.target.value.trim() !== '') {
+  //     e.preventDefault();
+  //     addTag(e.target.value);
+  //     e.target.value = '';
+  //   }
+  // };
+
+  // const addTag = (value) => {
+  //   if (!tags.includes(value)) {
+  //     setTags([...tags, value]);
+  //   }
+  // };
+
+  // const removeTag = (value) => {
+  //   setTags(tags.filter(tag => tag !== value));
+  // };
+
+    // Tag handling
   const handleTagKeyPress = (e) => {
-    if (e.key === 'Enter' && e.target.value.trim() !== '') {
-      e.preventDefault();
-      addTag(e.target.value);
-      e.target.value = '';
+    if (e.key === 'Enter') {
+      const tag = e.target.value.trim();
+      if (tag && !tags.includes(tag)) {
+        setTags([...tags, tag]);
+        updatedProductData('tags', [...tags, tag]); // Send updated tags to parent component
+      }
+      e.target.value = ''; // Clear input box
     }
   };
 
-  const addTag = (value) => {
-    if (!tags.includes(value)) {
-      setTags([...tags, value]);
+  const removeTag = (tagToRemove) => {
+    const updatedTags = tags.filter(tag => tag !== tagToRemove);
+    setTags(updatedTags);
+    updatedProductData('tags', updatedTags); // Send updated tags to parent component
+  };
+
+  // Handle checkbox changes
+  const handleSellInStoreChange = (e) => {
+    const value = e.target.checked;
+    setSellInStore(value);
+    updatedProductData('sellInStore', value); // Send updated data to parent component
+  };
+
+  const handleSellOnlineChange = (e) => {
+    const value = e.target.checked;
+    setSellOnline(value);
+    updatedProductData('sellOnline', value); // Send updated data to parent component
+  };
+
+
+
+  const [attributes, setAttributes] = useState([]);
+  const [currentAttribute, setCurrentAttribute] = useState("flavour");
+  const [valueInput, setValueInput] = useState("");
+
+  const handleValueKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const value = valueInput.trim();
+      if (value) {
+        addValueToCurrentAttribute(value);
+        setValueInput("");
+      }
     }
   };
 
-  const removeTag = (value) => {
-    setTags(tags.filter(tag => tag !== value));
+  const addValueToCurrentAttribute = (value) => {
+    setAttributes((prevAttributes) => {
+      const attributeIndex = prevAttributes.findIndex(
+        (attr) => attr.name === currentAttribute
+      );
+
+      if (attributeIndex === -1) {
+        return [
+          ...prevAttributes,
+          { name: currentAttribute, values: [value] },
+        ];
+      }
+
+      const updatedAttributes = [...prevAttributes];
+      if (!updatedAttributes[attributeIndex].values.includes(value)) {
+        updatedAttributes[attributeIndex].values.push(value);
+      }
+
+      return updatedAttributes;
+    });
   };
 
+  const handleDeleteTag = (attributeName, value) => {
+    setAttributes((prevAttributes) => {
+      const updatedAttributes = prevAttributes.map((attr) => {
+        if (attr.name === attributeName) {
+          return {
+            ...attr,
+            values: attr.values.filter((val) => val !== value),
+          };
+        }
+        return attr;
+      });
 
+      return updatedAttributes.filter((attr) => attr.values.length > 0);
+    });
+  };
 
+  const generateVariants = () => {
+    if (attributes.length === 0) return [];
 
+    const singleAttribute = attributes.length === 1;
+    if (singleAttribute) {
+      return attributes[0].values.map((value) => ({
+        name: `${attributes[0].name}: ${value}`,
+      }));
+    } else {
+      return cartesianProduct(attributes.map((attr) => attr.values)).map(
+        (variant) => ({
+          name: variant.join(" / "),
+        })
+      );
+    }
+  };
+
+  const cartesianProduct = (arr) =>
+    arr.reduce((a, b) =>
+      a.flatMap((d) => b.map((e) => [d, e].flat()))
+    );
+
+  const handleAddNewAttributeRow = () => {
+    setAttributes((prevAttributes) => [
+      ...prevAttributes,
+      { name: "new", values: [] },
+    ]);
+  };
+
+  useEffect(() => {
+    // Update the variants table whenever attributes change
+    generateVariants();
+  }, [attributes]);
 
 
 
@@ -342,11 +568,11 @@ const handleSave = () => {
 
   return (
     <div className="add-product">
-      <h1> <span className="arrow">←</span> New Product</h1>
+      <h1> <span className="arrow"><i class="fa-solid fa-arrow-left"></i></span> New Product</h1>
       <div className="subtitle">
           <span>Add, view, and edit your products all in one place. Need help?</span>
           <div className="button-group">
-            <button className="cancel-button">Cancel</button>
+            <button className="cancel-button" onClick={handleBackToProducts}>Cancel</button>
             <button className="save-button" onClick={handleSave}>Save</button>
           </div>
         </div>
@@ -364,66 +590,67 @@ const handleSave = () => {
 
 
       <div className="form-group">
-  <label>Category:</label>
-  <div className="category-container">
-    <div className="category-summary" onClick={toggleCategorySection}>
-      <p id="selected-category-text">{selectedCategory || 'Select Category'}</p>
-      <button>{showCategoryDetails ? '▲' : '▼'}</button>
-    </div>
+        <label>Category:</label>
+        <div className="category-container">
+          <div className="category-summary" onClick={toggleCategorySection}>
+            <p id="selected-category-text">{selectedCategory || 'Select Category'}</p>
+            <button>{showCategoryDetails ? '▲' : '▼'}</button>
+          </div>
 
-    {showCategoryDetails && (
-      <div id="category-details" className="category-details">
-        <input
-          type="text"
-          placeholder="Search category..."
-          className="search-category"
-          onChange={(e) => filterItems('category', e)}
-          value={searchTerm}
-        />
-        <ul id="category-list" className="category-list">
-          {filteredCategories.map((category, index) => (
-            <li
-              key={index}
-              className="category-item"
-              onClick={() => selectCategory(category.name)}
-            >
-              {category.name}
-            </li>
-          ))}
-        </ul>
+          {showCategoryDetails && (
+            <div id="category-details" className="category-details">
+              <input
+                type="text"
+                placeholder="Search category..."
+                className="search-category"
+                onChange={(e) => filterItems('category', e)}
+                value={searchTerm}
+              />
+              <ul id="category-list" className="category-list">
+                {filteredCategories.map((category, index) => (
+                  <li
+                    key={index}
+                    className="category-item"
+                    onClick={() => selectCategory(category.name)}
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
 
-        {filteredCategories.length === 0 && searchTerm && (
-          <button
-            id="add-new-category"
-            className="add-new-category"
-            onClick={() => showAddPopup('category')}
-          >
-            + Add New Category
-          </button>
-        )}
-      </div>
-    )}
+              {filteredCategories.length === 0 && searchTerm && (
+                <button
+                  id="add-new-category"
+                  className="add-new-category"
+                  onClick={() => showAddPopup('category')}
+                >
+                  + Add New Category
+                </button>
+              )}
+            </div>
+          )}
 
-    {showPopup === 'category' && (
-      <div id="add-category-popup" className="popup">
-        <div className="popup-content">
-          <span className="close-popup" onClick={closeAddPopup}>
-            &times;
-          </span>
-          <h3>Add New Category</h3>
-          <input
-            type="text"
-            id="new-category-input"
-            placeholder="Enter category name"
-            value={newCategoryName}
-            onChange={(e) => setNewCategoryName(e.target.value)}
-          />
-          <button onClick={addNewCategory}>Add Category</button>
+          {showPopup === 'category' && (
+            <div id="add-category-popup" className="popup">
+              <div className="popup-content">
+                <span className="close-popup" onClick={closeAddPopup}>
+                  &times;
+                </span>
+                <h3>Add New Category</h3>
+                <input
+                  type="text"
+                  id="new-category-input"
+                  placeholder="Enter category name"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                />
+                <button onClick={addNewCategory}>Add Category</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    )}
-  </div>
-</div>
+
 
 
        <div className="form-group">
@@ -493,30 +720,31 @@ const handleSave = () => {
        <label>Description:</label>
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          // onChange={(e) => setDescription(e.target.value)}
+          onChange={handleDescriptionChange}
           placeholder="Enter product description"
         />
       </div>
       
       <div className="form-group">
-          <label>Tags:</label>
-          <div className="input-container">
-            <div className="input-wrapper" id="input-wrapper">
-              <input
-                type="text"
-                id="input-box"
-                placeholder="Type a tag and press Enter..."
-                onKeyPress={handleTagKeyPress}
-              />
-              {tags.map((tag, index) => (
-                <span key={index} className="chip">
-                  {tag}
-                  <span className="delete-chip" onClick={() => removeTag(tag)}>×</span>
-                </span>
-              ))}
-            </div>
+        <label>Tags:</label>
+        <div className="input-container">
+          <div className="input-wrapper" id="input-wrapper">
+            <input
+              type="text"
+              id="input-box"
+              placeholder="Type a tag and press Enter..."
+              onKeyPress={handleTagKeyPress}
+            />
+            {tags.map((tag, index) => (
+              <span key={index} className="chip">
+                {tag}
+                <span className="delete-chip" onClick={() => removeTag(tag)}>×</span>
+              </span>
+            ))}
           </div>
         </div>
+      </div>
       
       <div className="form-group">
         <label>Upload Images:</label>
@@ -563,12 +791,13 @@ const handleSave = () => {
         </div>
         </div>
       
-      <div className="row  image-preview">
+        <div className="form-group">
+      <div className="row image-preview">
         <label>
           <input
             type="checkbox"
             checked={sellInStore}
-            onChange={(e) => setSellInStore(e.target.checked)}
+            onChange={handleSellInStoreChange}
           />
           Sell on point-of-sale
         </label>
@@ -576,11 +805,12 @@ const handleSave = () => {
           <input
             type="checkbox"
             checked={sellOnline}
-            onChange={(e) => setSellOnline(e.target.checked)}
+            onChange={handleSellOnlineChange}
           />
           Sell online
         </label>
       </div>
+    </div>
       <div className="inventory-section">
         <h2>Inventory</h2>
         <div className="inventory-options">
@@ -588,15 +818,15 @@ const handleSave = () => {
             className={`inventory-option ${selectedProductType === 'Standard' ? 'selected' : ''}`}
             onClick={() => handleProductTypeChange('Standard')}
           >
-            <h3>Standard Product</h3>
-            <p>This product is a single SKU with its own inventory.</p>
+            <h3 style={{textAlign:"center"}}>Standard Product</h3>
+            {/* <p>This product is a single SKU with its own inventory.</p> */}
           </div>
           <div
             className={`inventory-option ${selectedProductType === 'Variant' ? 'selected' : ''}`}
             onClick={() => handleProductTypeChange('Variant')}
           >
-            <h3>Variant Product</h3>
-            <p>This is a group of similar products with different attributes like size or color. Each variant is a unique SKU with its own inventory.</p>
+            <h3 style={{textAlign:"center"}}>Variant Product</h3>
+            {/* <p>This is a group of similar products with different attributes like size or color. Each variant is a unique SKU with its own inventory.</p> */}
           </div>
         </div>
       </div>
@@ -604,81 +834,143 @@ const handleSave = () => {
       {selectedProductType === 'Standard' && (
         <>
  <div className="sku-container">
-        <h2>SKU CODES</h2>
-        <div className="sku-inputs">
-          <div className="sku-field">
-            <label htmlFor="sku-code-type">SKU Code Type:</label>
-            <select
-              id="sku-code-type"
-              value={skuCodeType}
-              onChange={handleSkuCodeTypeChange}
-            >
-              <option value="custom">Custom</option>
-              <option value="auto">Auto-Generated</option>
-            </select>
-          </div>
-          <div className="sku-field">
-            <label htmlFor="sku-code">SKU Code:</label>
-            <input
-              type="text"
-              id="sku-code"
-              value={skuCodeType === 'auto' ? generatedSkuCode : skuCode}
-              onChange={(e) => setSkuCode(e.target.value)}
-              placeholder="Enter SKU code"
-              readOnly={skuCodeType === 'auto'}
-            />
-          </div>
+      <h2>SKU CODES</h2>
+      <div className="sku-inputs">
+        <div className="sku-field">
+          <label htmlFor="sku-code-type">SKU Code Type:</label>
+          <select
+            id="sku-code-type"
+            value={skuCodeType}
+            onChange={handleSkuCodeTypeChange}
+          >
+            <option value="custom">Custom</option>
+            <option value="auto">Auto-Generated</option>
+          </select>
         </div>
-        <a href="#" className="add-code">+ Add another code</a>
-
-        <div className="sku-preview">
-          <div className="preview-image">
-          <img src={images[0]} alt="Preview" />
-          </div>
-          <div className="preview-details">
-            <p className="product-name">{productName || 'Product Name'}</p>
-            <p className="sku-number">{skuCodeType === 'auto' ? generatedSkuCode : skuCode}</p>
-            {/* <p className="sku-description">
-              The first SKU code will be shown to staff and customers to help identify this product. When you have multiple codes all the barcodes will be scannable.
-            </p> */}
-          </div>
+        <div className="sku-field">
+          <label htmlFor="sku-code">SKU Code:</label>
+          <input
+            type="text"
+            id="sku-code"
+            value={skuCodeType === 'auto' ? generatedSkuCode : skuCode}
+            onChange={(e) => setSkuCode(e.target.value)}
+            placeholder="Enter SKU code"
+            readOnly={skuCodeType === 'auto'}
+          />
         </div>
       </div>
+      <a href="#" className="add-code">+ Add another code</a>
+
+      <div className="sku-preview">
+        <div className="preview-image">
+          {images.length > 0 && <img src={images[0]} alt="Preview" />}
+        </div>
+        <div className="preview-details">
+          <p className="product-name">{productName || 'Product Name'}</p>
+          <p className="sku-number">{skuCodeType === 'auto' ? generatedSkuCode : skuCode}</p>
+          {/* <p className="sku-description">
+            The first SKU code will be shown to staff and customers to help identify this product. When you have multiple codes all the barcodes will be scannable.
+          </p> */}
+        </div>
+      </div>
+    </div>
       <SupplierInfo suppliers={suppliers} onSuppliersChange={handleSuppliersChange} />
 </>
 
       )}
             {selectedProductType === 'Variant' && (
-        <>
+           <>
       <SupplierInfo suppliers={suppliers} onSuppliersChange={handleSuppliersChange} />
+      
+      <div className="variants-container">
+      {attributes.map((attribute, index) => (
+        <div key={index} className="variant-row">
+          <div className="attribute">
+            <label htmlFor={`attribute-${index}`}>Attribute</label>
+            <select
+              id={`attribute-${index}`}
+              value={attribute.name}
+              onChange={(e) =>
+                setAttributes((prevAttributes) => {
+                  const updatedAttributes = [...prevAttributes];
+                  updatedAttributes[index].name = e.target.value;
+                  return updatedAttributes;
+                })
+              }
+            >
+              <option value="flavour">Flavour</option>
+              <option value="quantity">Quantity</option>
+              {/* Add more attribute options as needed */}
+            </select>
+          </div>
 
-<div class="variants-section">
-    <h2>Variants</h2>
-    <p class="variants-description">Choose up to three variable attributes for this product to create and manage SKUs and their inventory levels.</p>
-    
-    <div class="variant-row">
-        <div class="variant-label">Attribute (e.g. colour)</div>
-        <div class="variant-label">Value (e.g. Green)</div>
-    </div>
-    
-    <div class="variant-row">
-        <select class="variant-select">
-            <option>Choose a variant attribute</option>
-            <option>Color</option>
-            <option>Size</option>
-            <option>Material</option>
-        </select>
-        <input type="text" class="variant-input" placeholder="Enter value"/>
-    </div>
+          <div className="value">
+            <label htmlFor={`valueInput-${index}`}>Value</label>
+            <div className="value-tags">
+              {attribute.values.map((value, valueIndex) => (
+                <span key={valueIndex} className="tag">
+                  {value}{" "}
+                  <i
+                    className="fa fa-times"
+                    onClick={() =>
+                      handleDeleteTag(attribute.name, value)
+                    }
+                  ></i>
+                </span>
+              ))}
+            </div>
+            <input
+              id={`valueInput-${index}`}
+              type="text"
+              placeholder="Add a value and press enter"
+              value={valueInput}
+              onChange={(e) => setValueInput(e.target.value)}
+              onKeyPress={handleValueKeyPress}
+            />
+          </div>
+        </div>
+      ))}
 
-    <a href="#" class="add-attribute">+ Add another attribute</a>
+      <button className="add-attribute" onClick={handleAddNewAttributeRow}>
+        Add New Attribute
+      </button>
 
-    <p class="variant-status">This product has 0 variants</p>
-</div>
+      <table id="variantsTable">
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th>SKU</th>
+            <th>Code</th>
+            <th>Price</th>
+            <th>Cost</th>
+            <th>Enabled</th>
+          </tr>
+        </thead>
+        <tbody>
+          {generateVariants().map((variant, index) => (
+            <tr key={index}>
+              <td>{variant.name}</td>
+              <td>
+                <input
+                  type="text"
+                  value={`SKU-${Math.random().toString(36).substr(2, 5)}`}
+                />
+              </td>
+              <td>
+                <input type="text" placeholder="Enter code" />
+              </td>
+              <td>
+                <input type="number" defaultValue="0.00" />
+              </td>
+                </tr>
 
-</>
+))}
+      </tbody>
+      </table>
+      </div>
 
-      )}
+
+      
       <div class="tax-info">
     <h2>Tax Information</h2>
 
@@ -694,63 +986,74 @@ const handleSave = () => {
 
 
       <div className="price-section">
-            <h2>Price</h2>
-            <h3 className="section-title">PRICE</h3>
-            
-            <div className="price-table">
-                <div className="price-row">
-                    <div className="price-header">Price point</div>
-                    <div className="price-header">Supply price</div>
-                    <div className="price-header">Markup</div>
-                    <div className="price-header">Margin</div>
-                    <div className="price-header">Tax</div>
-                    <div className="price-header">Retail price Including tax</div>
-                </div>
-                <div className="price-row">
-                    <div className="price-item">General Price Book (All Products)</div>
-                    <div className="price-item">
-                    <input
-    type="text"
-    value={supplyPrice}
-    onChange={(e) => setSupplyPrice(e.target.value)}
-    placeholder="$0.00"
-/>
-                    </div>
-                    <div className="price-item">
-                        <div className="input-group">
-                        <input
-    type="text"
-    value={markup}
-    onChange={(e) => setMarkup(e.target.value)}
-    placeholder="0.00"
-/>
-                            <span className="input-group-text">%</span>
-                        </div>
-                    </div>
-                    <div className="price-item">
-                        <div className="input-group">
-                        <input
-    type="text"
-    value={margin}
-    onChange={(e) => setMargin(e.target.value)}
-    placeholder="0.00"
-/>
-                            <span className="input-group-text">%</span>
-                        </div>
-                    </div>
-                    <div className="price-item">
-                    <p>0%</p>
-                    </div>
-                    <div className="price-item">
-                        <input
-                            type="text"
-                            value={`$${calculateRetailPrice()}`}
-                            readOnly
-                        />
-                    </div>
-                </div>
-            </div>
+      <h2>Price</h2>
+      <h3 className="section-title">PRICE</h3>
+
+      <div className="price-table">
+        <div className="price-row">
+          <div className="price-header">Price point</div>
+          <div className="price-header">Supply price</div>
+          <div className="price-header">Markup</div>
+          <div className="price-header">Margin</div>
+          <div className="price-header">Tax</div>
+          <div className="price-header">Retail price Including tax</div>
         </div>
+        <div className="price-row">
+          <div className="price-item">General Price Book (All Products)</div>
+          <div className="price-item">
+            <input
+              type="text"
+              value={supplyPrice}
+              onChange={handleSupplyPriceChange}
+              placeholder="$0.00"
+            />
+          </div>
+          <div className="price-item">
+            <div className="input-group">
+              <input
+                type="text"
+                value={markup}
+                onChange={handleMarkupChange}
+                placeholder="0.00"
+              />
+              <span className="input-group-text">%</span>
+            </div>
+          </div>
+          <div className="price-item">
+            <div className="input-group">
+              <input
+                type="text"
+                value={margin}
+                onChange={handleMarginChange}
+                placeholder="0.00"
+              />
+              <span className="input-group-text">%</span>
+            </div>
+          </div>
+          <div className="price-item">
+            <div className="input-group">
+              <input
+                type="text"
+                value={tax}
+                onChange={handleTaxChange}
+                placeholder="0.00"
+              />
+              <span className="input-group-text">%</span>
+            </div>
+          </div>
+          <div className="price-item">
+            <p>0%</p>
+          </div>
+          <div className="price-item">
+            <input
+              type="text"
+              value={`$${calculateRetailPrice()}`}
+              readOnly
+            />
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
@@ -758,8 +1061,10 @@ const handleSave = () => {
         <button className="btn-cancel">Cancel</button>
         <button onClick={handleSave} className="btn-save">Save</button>
       </div>
-    </div>
+      </>
+            )}
+      </div> 
   );
 };
 
-export default AddProductPage;
+export default AddProductPage;  

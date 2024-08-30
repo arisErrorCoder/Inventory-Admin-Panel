@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create a context
 export const StoreContext = createContext();
@@ -174,34 +174,35 @@ const [brands, setBrands] = useState([
   { name: 'Zippo', description: 'Lighters and accessories', products: 15 },
   { name: 'ZPods', description: 'Vape pod system', products: 10 },
 ]);
-const [suppliers, setSuppliers] = useState([
-  { name: "ALL IZ WELL", products: 0 },
-  { name: "AVS", products: 0 },
-  { name: "BAT", products: 0 },
-  { name: "Bliss", products: 0 },
-  { name: "charbella", products: 0 },
-  { name: "Chess Group Ltd", products: 0 },
-  { name: "COTD", products: 0 },
-  { name: "DHIMAHI TRADING LIMITED", products: 0 },
-  { name: "DT Vape", products: 0 },
-  { name: "Kiwi Catering", products: 0 },
-  { name: "KPL", products: 0 },
-  { name: "Lion Lab", products: 0 },
-  { name: "Magical Butter", products: 0 },
-  { name: "Mevol", products: 0 },
-  { name: "mission", products: 0 },
-  { name: "NZTG", products: 0 },
-  { name: "Phillip Morris", products: 0 },
-  { name: "QSSL", products: 0 },
-  { name: "SunTree", products: 0 },
-  { name: "Titex Group", products: 0 },
-  { name: "Top Trade International Ltd", products: 0 },
-  { name: "Vape HQ", products: 0 },
-  { name: "Vape Traders New Zealand", products: 0 },
-  { name: "Vapeyes", products: 0 },
-  { name: "Vapeys Wholesale", products: 0 },
-  { name: "Vapo", products: 0 }
-]);
+// const [suppliers, setSuppliers] = useState([
+//   { name: "ALL IZ WELL", code: "", price: "", products: 0 },
+//   { name: "AVS", code: "", price: "", products: 0 },
+//   { name: "BAT", code: "", price: "", products: 0 },
+//   { name: "Bliss", code: "", price: "", products: 0 },
+//   { name: "charbella", code: "", price: "", products: 0 },
+//   { name: "Chess Group Ltd", code: "", price: "", products: 0 },
+//   { name: "COTD", code: "", price: "", products: 0 },
+//   { name: "DHIMAHI TRADING LIMITED", code: "", price: "", products: 0 },
+//   { name: "DT Vape", code: "", price: "", products: 0 },
+//   { name: "Kiwi Catering", code: "", price: "", products: 0 },
+//   { name: "KPL", code: "", price: "", products: 0 },
+//   { name: "Lion Lab", code: "", price: "", products: 0 },
+//   { name: "Magical Butter", code: "", price: "", products: 0 },
+//   { name: "Mevol", code: "", price: "", products: 0 },
+//   { name: "mission", code: "", price: "", products: 0 },
+//   { name: "NZTG", code: "", price: "", products: 0 },
+//   { name: "Phillip Morris", code: "", price: "", products: 0 },
+//   { name: "QSSL", code: "", price: "", products: 0 },
+//   { name: "SunTree", code: "", price: "", products: 0 },
+//   { name: "Titex Group", code: "", price: "", products: 0 },
+//   { name: "Top Trade International Ltd", code: "", price: "", products: 0 },
+//   { name: "Vape HQ", code: "", price: "", products: 0 },
+//   { name: "Vape Traders New Zealand", code: "", price: "", products: 0 },
+//   { name: "Vapeyes", code: "", price: "", products: 0 },
+//   { name: "Vapeys Wholesale", code: "", price: "", products: 0 },
+//   { name: "Vapo", code: "", price: "", products: 0 }
+// ]);
+
 
 
   const [showBrandDetails, setShowBrandDetails] = useState(false);
@@ -209,6 +210,29 @@ const [suppliers, setSuppliers] = useState([
   const [tags, setTags] = useState('');
   const [images, setImages] = useState([]);
   const [sellInStore, setSellInStore] = useState(false);
+  const [suppliers, setSuppliers] = useState([{ name: '', code: '', price: '' }]);
+
+
+
+  const [productData, setProductData] = useState({
+    productName: '',
+            selectedCategory: '',
+            selectedBrand: '',
+            description: '',
+            tags: [],
+            images: [],
+            sellInStore: false,
+            sellOnline: false,
+            skuCode: '',
+            skuCodeType: 'custom',  
+            markup: '',
+            margin: '',
+            tax: '',
+            suppliers: [{ name: '', code: '', price: '' }],
+  });
+
+
+  
 
   // Provide the state and state updaters to children components
   return (
@@ -218,7 +242,7 @@ const [suppliers, setSuppliers] = useState([
         setProductName,
         selectedSupplier,
         setSelectedSupplier,
-        suppliers, 
+        suppliers,productData, setProductData,
         setSuppliers,
         selectedCategory,
         setSelectedCategory,
@@ -236,7 +260,7 @@ const [suppliers, setSuppliers] = useState([
         setTags,
         images,
         setImages,
-        sellInStore,
+        sellInStore,suppliers, setSuppliers,
         setSellInStore,
         categories, setCategories,brands, setBrands,
       }}

@@ -64,7 +64,7 @@ const ProductPage = () => {
   return (
     <div className="containerr">
       {showAddProductPage ? (
-        <AddProductPage onBack={handleBackToProducts} /> // Pass back function if needed
+        <AddProductPage handleBackToProducts={handleBackToProducts} /> // Pass back function if needed
       ) : (
         <>
           <h1>Products</h1>
