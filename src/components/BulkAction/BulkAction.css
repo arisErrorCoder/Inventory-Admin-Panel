@@ -1,0 +1,126 @@
+/* Main container for bulk upload */
+.bulk-upload-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 80%;
+  max-width: 600px;
+  margin: 100px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Title styling */
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* Drag and Drop area */
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: #555;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.dropzone:hover {
+  border-color: #4CAF50;
+}
+
+.dropzone p {
+  margin: 0;
+}
+
+/* Uploaded file info styling */
+.uploaded-file-info {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Upload button */
+.upload-section {
+  margin-top: 1.5rem;
+}
+
+.upload-button {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+  background-color: #45a049;
+}
+
+.upload-button:active {
+  background-color: #388e3c;
+}
+
+/* Download sample file button */
+.download-section {
+  margin-top: 1.5rem;
+}
+
+.download-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+
+.download-button:active {
+  background-color: #004085;
+}
+
+/* Success and Error messages styling */
+.success-message {
+  color: green;
+  padding: 20px 0px;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  padding: 20px 0px;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .bulk-upload-container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .upload-button, .download-button {
+    padding: 10px 15px;
+  }
+
+  .dropzone {
+    padding: 1.5rem;
+  }
+}

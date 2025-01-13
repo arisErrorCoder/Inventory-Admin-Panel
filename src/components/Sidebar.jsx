@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import { HouseSimple, User, CalendarBlank, ChartBar, FileText, Gear, Info, SignOut } from 'phosphor-react';
 
-const Sidebar = ({ onMenuClick }) => {
+
+const Sidebar = ({ onMenuClick, role ,setUser }) => {
   const [isActive, setIsActive] = useState(false);
   const [activeMenu, setActiveMenu] = useState('');
 
   const toggleSidebar = () => {
     setIsActive(!isActive);
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem('user'); // Remove user data from localStorage
+    setUser(null); // Clear the user state
+  };
   const handleMenuItemClick = (menu) => {
-    if (menu === 'viewers') {
-      setActiveMenu('viewers');
-      onMenuClick('add-product');
-       // Set default content to "add-product"
-    }
-    // if (menu === 'dashboard') {
-    //   setActiveMenu('dashboard');
-    //   onMenuClick('Dashbord'); }
-    
-    else {
+    if (menu === 'dashboard') {
+      setActiveMenu('dashboard');
+      onMenuClick('Dashboard');
+    } else {
       setActiveMenu(menu === activeMenu ? '' : menu);
       onMenuClick(menu);
     }
@@ -35,8 +33,8 @@ const Sidebar = ({ onMenuClick }) => {
           <img src="https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png" alt="" />
         </div>
         <div className="user-details">
-          <p className="title">Hukka</p>
-          <p className="name">Admin :Name</p>
+          <p className="title">Ganga Collection</p>
+          {/* <p className="name">Admin :Name</p> */}
         </div>
       </div>
       <div className="nav">
@@ -44,86 +42,126 @@ const Sidebar = ({ onMenuClick }) => {
           <p className="title">Main</p>
           <ul>
             <li className={activeMenu === 'dashboard' ? 'active' : ''}>
-              <a href="#" onClick={() => handleMenuItemClick('Dashbord')}>
+              <a href="#" onClick={() => handleMenuItemClick('dashboard')}>
                 <i className="icon ph-bold ph-house-simple"></i>
                 <span className="text">Dashboard</span>
               </a>
             </li>
-            {/* <li className={activeMenu === 'dashboard' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('Dashbord')}>
+            
+            {/* Conditionally render Product Management based on role */}
+            {role === 'Admin' || role === 'Manager' ? (
+              <li className={activeMenu === 'viewers' ? 'active' : ''}>
+                <a href="#" onClick={() => handleMenuItemClick('viewers')}>
+                  <i className="icon ph-bold ph-user"></i>
+                  <span className="text">Product Management</span>
+                  <i className="arrow ph-bold ph-caret-down"></i>
+                </a>
+                <ul className="sub-menu" style={{ display: activeMenu === 'viewers' ? 'block' : 'none' }}>
+                  <li className={activeMenu === 'Addnewproduct' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('Addnewproduct')}>
+                      <span className="text">Add New Product</span>
+                    </a>
+                  </li>
+                  <li className={activeMenu === 'Productlist' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('Productlist')}>
+                      <span className="text">Product List</span>
+                    </a>
+                  </li>
+                  <li className={activeMenu === 'Bulkaction' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('Bulkaction')}>
+                      <span className="text">Bulk Actions</span>
+                    </a>
+                  </li>
+                  <li className={activeMenu === 'BarcodeGenerate' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('BarcodeGenerate')}>
+                      <span className="text">Bar Code Generator</span>
+                    </a>
+                  </li>
+                  <li className={activeMenu === 'CouponGenerate' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('CouponGenerate')}>
+                      <span className="text">Coupon Code Generator</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            ) : null}
+
+            {/* Conditionally render Inventory based on role */}
+            {role === 'Admin' || role === 'Manager' ? (
+              <li className={activeMenu === 'agenda' ? 'active' : ''}>
+                <a href="#" onClick={() => handleMenuItemClick('agenda')}>
+                  <i className="icon ph-bold ph-calendar-blank"></i>
+                  <span className="text">Inventory</span>
+                  <i className="arrow ph-bold ph-caret-down"></i>
+                </a>
+                <ul className="sub-menu" style={{ display: activeMenu === 'agenda' ? 'block' : 'none' }}>
+                  <li className={activeMenu === 'StockControl' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('StockControl')}>
+                      <span className="text">Stock Control</span>
+                    </a>
+                  </li>
+                  <li className={activeMenu === 'inventoryControl' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('inventoryControl')}>
+                      <span className="text">Inventory Report</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            ) : null}
+
+            {/* Orders Management (only for Admin/Manager roles) */}
+            {role === 'Admin' || role === 'Manager' ? (
+              <li className={activeMenu === 'revenue' ? 'active' : ''}>
+                <a href="#" onClick={() => handleMenuItemClick('revenue')}>
+                  <i className="icon ph-bold ph-chart-bar"></i>
+                  <span className="text">Orders Management</span>
+                  <i className="arrow ph-bold ph-caret-down"></i>
+                </a>
+                <ul className="sub-menu" style={{ display: activeMenu === 'revenue' ? 'block' : 'none' }}>
+                  <li className={activeMenu === 'allorders' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('allorders')}>
+                      <span className="text">All Orders</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            ) : null}
+
+            {/* Users menu (Admin only) */}
+            {role === 'Admin' ? (
+              <li className={activeMenu === 'articles' ? 'active' : ''}>
+                 <a href="#" onClick={() => handleMenuItemClick('articles')}>
+  <i className="icon ph-bold ph-users"></i>
+  <span className="text">Users</span>
+  <i className="arrow ph-bold ph-caret-down"></i>
                   </a>
-                </li> */}
-            <li className={activeMenu === 'viewers' ? 'active' : ''}>
-              <a href="#" onClick={() => handleMenuItemClick('viewers')}>
-                <i className="icon ph-bold ph-user"></i>
-                <span className="text">Catalog</span>
-                <i className="arrow ph-bold ph-caret-down"></i>
-              </a>
-              <ul className="sub-menu" style={{ display: activeMenu === 'viewers' ? 'block' : 'none' }}>
-                <li className={activeMenu === 'add-product' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('add-product')}>
-                    <span className="text">Product</span>
-                  </a>
-                </li>
-                <li className={activeMenu === 'promotions' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('promotions')}>
-                    <span className="text">Promotions</span>
-                  </a>
-                </li>
-                <li className={activeMenu === 'Brands' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('Brands')}>
-                    <span className="text">Brands</span>
-                  </a>
-                </li>
-                <li className={activeMenu === 'suppliers' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('suppliers')}>
-                    <span className="text">Suppliers</span>
-                  </a>
-                </li>
-                <li className={activeMenu === 'categories' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('categories')}>
-                    <span className="text">Product categories</span>
-                  </a>
-                </li>
-                <li className={activeMenu === 'productstags' ? 'active' : ''}>
-                  <a href="#" onClick={() => handleMenuItemClick('productstags')}>
-                    <span className="text">Product Tags</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className={activeMenu === 'agenda' ? 'active' : ''}>
-              <a href="#" onClick={() => handleMenuItemClick('agenda')}>
-                <i className="icon ph-bold ph-calendar-blank"></i>
-                <span className="text">Inventory</span>
-                <i className="arrow ph-bold ph-caret-down"></i>
-              </a>
-              <ul className="sub-menu" style={{ display: activeMenu === 'agenda' ? 'block' : 'none' }}>
-                <li><a href="#">Stock Control</a></li>
-                <li><a href="#">Inventory Counts</a></li>
-              </ul>
-            </li>
-            <li className={activeMenu === 'revenue' ? 'active' : ''}>
-              <a href="#" onClick={() => handleMenuItemClick('revenue')}>
-                <i className="icon ph-bold ph-chart-bar"></i>
-                <span className="text">Revenue</span>
-                <i className="arrow ph-bold ph-caret-down"></i>
-              </a>
-              <ul className="sub-menu" style={{ display: activeMenu === 'revenue' ? 'block' : 'none' }}>
-                <li><a href="#">Earnings</a></li>
-                <li><a href="#">Funds</a></li>
-                <li><a href="#">Declines</a></li>
-                <li><a href="#">Payouts</a></li>
-              </ul>
-            </li>
-            <li className={activeMenu === 'articles' ? 'active' : ''}>
-              <a href="#" onClick={() => handleMenuItemClick('articles')}>
-                <i className="icon ph-bold ph-file-text"></i>
-                <span className="text">Articles</span>
-              </a>
+
+                <ul className="sub-menu" style={{ display: activeMenu === 'articles' ? 'block' : 'none' }}>
+                  <li className={activeMenu === 'userlist' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('userlist')}>
+                      <span className="text">User List</span>
+                    </a>
+                  </li>
+                  <li className={activeMenu === 'userroleupdate' ? 'active' : ''}>
+                    <a href="#" onClick={() => handleMenuItemClick('userroleupdate')}>
+                      <span className="text">User Role Action</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            ) : null}
+
+            {/* Billing (visible for all roles) */}
+            <li className={activeMenu === 'billing' ? 'active' : ''}>
+            <a href="#" onClick={() => handleMenuItemClick('billing')}>
+  <i className="icon ph-bold ph-credit-card"></i>
+  <span className="text">Billing</span>
+</a>
+
             </li>
           </ul>
         </div>
+
         <div className="menu">
           <p className="title">Settings</p>
           <ul>
@@ -136,6 +174,7 @@ const Sidebar = ({ onMenuClick }) => {
           </ul>
         </div>
       </div>
+
       <div className="menu">
         <p className="title">Account</p>
         <ul>
@@ -145,8 +184,8 @@ const Sidebar = ({ onMenuClick }) => {
               <span className="text">FAQ</span>
             </a>
           </li>
-          <li className={activeMenu === 'logout' ? 'active' : ''}>
-            <a href="#" onClick={() => handleMenuItemClick('logout')}>
+          <li  className={activeMenu === 'logout' ? 'active' : ''}>
+            <a href="#" onClick={handleLogout}>
               <i className="icon ph-bold ph-sign-out"></i>
               <span className="text">Logout</span>
             </a>
